@@ -1,0 +1,6 @@
+lowercaseKeywords: true
+
+connections:
+  - alias: promode
+    driver: postgresql
+    dataSourceName: "host=localhost port=5432 user=promode dbname=promode sslmode=disable"
