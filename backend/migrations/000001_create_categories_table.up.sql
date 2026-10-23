@@ -1,5 +1,6 @@
 CREATE TABLE IF NOT EXISTS categories(
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     name TEXT NOT NULL UNIQUE CHECK(CHAR_LENGTH(name) BETWEEN 3
-    AND 12)
+    AND 30
+    AND name <> '')
 );
