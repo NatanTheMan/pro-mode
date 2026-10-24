@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS habits(
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    points INTEGER NOT NULL CHECK(points BETWEEN 0
+    points INTEGER NOT NULL CHECK(points BETWEEN 1
     AND 200),
     active BOOLEAN NOT NULL DEFAULT TRUE,
     created_at timestamptz NOT NULL DEFAULT now(),
