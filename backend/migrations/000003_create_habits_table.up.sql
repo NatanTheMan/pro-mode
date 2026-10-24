@@ -1,11 +1,15 @@
 CREATE TABLE IF NOT EXISTS habits(
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    name TEXT NOT NULL CHECK(CHAR_LENGTH(TRIM(BOTH ' '
+    points INTEGER NOT NULL CHECK(points BETWEEN 0
+    AND 200),
+    active BOOLEAN NOT NULL DEFAULT TRUE,
+    created_at timestamptz NOT NULL DEFAULT now(),
+    name TEXT NOT NULL UNIQUE CHECK(CHAR_LENGTH(TRIM(BOTH ' '
 FROM
     name)) BETWEEN 3
     AND 15),
-    points INT NOT NULL CHECK(points > 0),
-    active BOOLEAN NOT NULL DEFAULT TRUE,
     category_id UUID NOT NULL REFERENCES categories(id)
 ON DELETE RESTRICT
 );
+CREATE INDEX idx_habit_category
+ON habits(category_id);
