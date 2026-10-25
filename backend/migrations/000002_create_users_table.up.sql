@@ -6,8 +6,8 @@ CREATE TABLE IF NOT EXISTS users(
     active BOOLEAN NOT NULL DEFAULT TRUE,
     created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
     telegram_id BIGINT NOT NULL UNIQUE,
-    CONSTRAINT role_names CHECK(role = 'USER'
-    OR role = 'OWNER'),
+    CONSTRAINT role_names CHECK(role = 'MEMBER'
+    OR role = 'ADMIN'),
     CONSTRAINT name_valid CHECK(CHAR_LENGTH (TRIM(BOTH ' '
 FROM
     name)) <= 64
