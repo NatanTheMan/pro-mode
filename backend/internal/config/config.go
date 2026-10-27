@@ -13,7 +13,7 @@ type Config struct {
 	DatabaseURL string
 	DevID,
 	ChatID,
-	AdminID int
+	AdminID int64
 }
 
 func Load() (*Config, error) {
@@ -54,13 +54,13 @@ func Load() (*Config, error) {
 	return cfg, nil
 }
 
-func intEnv(key string) (int, error) {
+func intEnv(key string) (int64, error) {
 	value := os.Getenv(key)
 	if value == "" {
 		return 0, fmt.Errorf("empty env: %s", key)
 	}
 
-	i, err := strconv.Atoi(value)
+	i, err := strconv.ParseInt(value, 10, 64)
 	if err != nil {
 		return 0, fmt.Errorf("%s: invalid int: %s", key, value)
 	}
