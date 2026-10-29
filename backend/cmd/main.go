@@ -2,7 +2,7 @@ package main
 
 import (
 	"context"
-	"fmt"
+	"log/slog"
 	"os"
 	"os/signal"
 
@@ -15,32 +15,49 @@ import (
 )
 
 func main() {
-	err := godotenv.Load()
-	if err != nil {
-		fmt.Println(err)
+	if err := run(); err != nil {
+		slog.Error("bot error", "error", err)
 		os.Exit(1)
 	}
+}
+
+func run() error {
+	err := godotenv.Load()
+	if err != nil {
+		return err
+	}
+
 	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt)
 	defer cancel()
 
 	cfg, err := config.Load()
 	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
+		return err
 	}
+
+	logger := newLogger()
+	slog.SetDefault(logger)
 
 	pool, err := database.NewPool(ctx, cfg.DatabaseURL)
 	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
+		return err
 	}
 
 	repo := repository.NewUserRepository(pool)
 	svc := service.NewUserService(repo, cfg.AdminID, cfg.DevID)
 
-	err = telegram.Run(ctx, cfg, svc)
+	err = telegram.Run(ctx, cfg, svc, logger)
 	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
+		return err
 	}
+	logger.Info("bot starting")
+
+	return nil
+}
+
+func newLogger() *slog.Logger {
+	opts := &slog.HandlerOptions{
+		Level: slog.LevelInfo,
+	}
+	return slog.New(slog.NewTextHandler(os.Stdout, opts))
 }
