@@ -50,7 +50,7 @@ func TestCategoryService_Create(t *testing.T) {
 			nil,
 		},
 		{
-			"user does not have permissio",
+			"user does not have permission",
 			&mockCategoryRepo{},
 			123442343,
 			1234, 4321,
