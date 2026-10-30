@@ -43,7 +43,7 @@ func TestCategoryService_Create(t *testing.T) {
 				id: uuid.MustParse("21788057-b80e-440f-a44b-56833bbb8aa9"),
 			},
 			4321,
-			1234,
+			4321,
 			"		Saude ",
 			&domain.Category{ID: uuid.MustParse("21788057-b80e-440f-a44b-56833bbb8aa9"), Name: "Saude"},
 			nil,
