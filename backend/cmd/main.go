@@ -43,10 +43,12 @@ func run() error {
 		return err
 	}
 
-	repo := repository.NewUserRepository(pool)
-	svc := service.NewUserService(repo, cfg.AdminID, cfg.DevID)
+	userRepo := repository.NewUserRepository(pool)
+	userSvc := service.NewUserService(userRepo, cfg.AdminID, cfg.DevID)
+	categoryRepo := repository.NewCategoryRepository(pool)
+	categorySvc := service.NewCategoryService(categoryRepo, cfg.AdminID, cfg.DevID)
 
-	err = telegram.Run(ctx, cfg, svc, logger)
+	err = telegram.Run(ctx, cfg, logger, userSvc, categorySvc)
 	if err != nil {
 		return err
 	}

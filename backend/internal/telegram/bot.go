@@ -12,8 +12,9 @@ import (
 func Run(
 	ctx context.Context,
 	cfg *config.Config,
-	svc *service.UserService,
 	logger *slog.Logger,
+	userSvc *service.UserService,
+	categorySvc *service.CategoryService,
 ) error {
 	opts := []bot.Option{
 		bot.WithMiddlewares(allownedChat(cfg, logger)),
@@ -24,14 +25,10 @@ func Run(
 		panic(err)
 	}
 
-	handler := newHandler(svc, logger)
+	userHandler := newUserHandler(logger, userSvc)
+	categoryHandler := newCategoryHandler(logger, categorySvc)
 
-	b.RegisterHandler(
-		bot.HandlerTypeMessageText,
-		"/registrar",
-		bot.MatchTypePrefix,
-		handler.Register,
-	)
+	registerHandlers(b, userHandler, categoryHandler)
 
 	b.Start(ctx)
 
