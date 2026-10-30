@@ -11,7 +11,6 @@ import (
 type Config struct {
 	Token,
 	DatabaseURL string
-	DevID,
 	ChatID,
 	AdminID int64
 }
@@ -19,10 +18,6 @@ type Config struct {
 func Load() (*Config, error) {
 	var errs []error
 
-	devID, err := intEnv("DEV_ID")
-	if err != nil {
-		errs = append(errs, err)
-	}
 	adminID, err := intEnv("ADMIN_ID")
 	if err != nil {
 		errs = append(errs, err)
@@ -33,7 +28,6 @@ func Load() (*Config, error) {
 	}
 
 	cfg := &Config{
-		DevID:       devID,
 		Token:       os.Getenv("TOKEN"),
 		ChatID:      chatID,
 		AdminID:     adminID,

@@ -13,21 +13,19 @@ type CategoryRepository interface {
 }
 
 type CategoryService struct {
-	repo CategoryRepository
-	adminID,
-	devID int64
+	repo    CategoryRepository
+	adminID int64
 }
 
-func NewCategoryService(repo CategoryRepository, adminID, devID int64) *CategoryService {
+func NewCategoryService(repo CategoryRepository, adminID int64) *CategoryService {
 	return &CategoryService{
 		repo:    repo,
 		adminID: adminID,
-		devID:   devID,
 	}
 }
 
 func (s *CategoryService) Create(ctx context.Context, name string, userID int64) (*domain.Category, error) {
-	if userID != s.devID && userID != s.adminID {
+	if userID != s.adminID {
 		return nil, domain.ErrAccessDenied
 	}
 

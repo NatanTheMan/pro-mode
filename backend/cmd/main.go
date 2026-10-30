@@ -44,9 +44,9 @@ func run() error {
 	}
 
 	userRepo := repository.NewUserRepository(pool)
-	userSvc := service.NewUserService(userRepo, cfg.AdminID, cfg.DevID)
+	userSvc := service.NewUserService(userRepo, cfg.AdminID)
 	categoryRepo := repository.NewCategoryRepository(pool)
-	categorySvc := service.NewCategoryService(categoryRepo, cfg.AdminID, cfg.DevID)
+	categorySvc := service.NewCategoryService(categoryRepo, cfg.AdminID)
 
 	err = telegram.Run(ctx, cfg, logger, userSvc, categorySvc)
 	if err != nil {

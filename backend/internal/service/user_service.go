@@ -16,13 +16,12 @@ type UserRepository interface {
 }
 
 type UserService struct {
-	repo UserRepository
-	adminID,
-	devID int64
+	repo    UserRepository
+	adminID int64
 }
 
-func NewUserService(repo UserRepository, adminID, devID int64) *UserService {
-	return &UserService{repo: repo, adminID: adminID, devID: devID}
+func NewUserService(repo UserRepository, adminID int64) *UserService {
+	return &UserService{repo: repo, adminID: adminID}
 }
 
 func (s *UserService) Register(ctx context.Context, name, username string, telegramID int64) (*domain.User, error) {
@@ -45,7 +44,7 @@ func (s *UserService) Register(ctx context.Context, name, username string, teleg
 	if err != nil {
 		return nil, err
 	}
-	if telegramID == s.adminID || telegramID == s.devID {
+	if telegramID == s.adminID {
 		user.Role = domain.Admin
 	}
 	return s.repo.Create(ctx, user)

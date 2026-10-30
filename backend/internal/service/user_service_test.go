@@ -59,8 +59,7 @@ func TestUserService_Register(t *testing.T) {
 		name,
 		username string
 		telegramID,
-		adminID,
-		devID int64
+		adminID int64
 		want    *domain.User
 		wantErr error
 	}{
@@ -73,7 +72,7 @@ func TestUserService_Register(t *testing.T) {
 			"Marco",
 			"marco1234lakj342443",
 			9128742,
-			0, 0,
+			0,
 			&domain.User{
 				ID:         uuid.MustParse("91c37bcf-5dd5-4a8a-9009-c227d4e91d1e"),
 				Name:       "Marco",
@@ -81,26 +80,6 @@ func TestUserService_Register(t *testing.T) {
 				TelegramID: 9128742,
 				Active:     true,
 				Role:       domain.Member,
-			},
-			nil,
-		},
-		{
-			"dev with admin rights",
-			&mockRepo{
-				id: uuid.MustParse("91c37bcf-5dd5-4a8a-9009-c227d4e91d1e"),
-				db: []*domain.User{},
-			},
-			"dever",
-			"dev71",
-			1442341,
-			0, 1442341,
-			&domain.User{
-				ID:         uuid.MustParse("91c37bcf-5dd5-4a8a-9009-c227d4e91d1e"),
-				Name:       "dever",
-				Username:   "dev71",
-				TelegramID: 1442341,
-				Active:     true,
-				Role:       domain.Admin,
 			},
 			nil,
 		},
@@ -113,7 +92,7 @@ func TestUserService_Register(t *testing.T) {
 			"owner",
 			"owner1283749",
 			14423889,
-			14423889, 0,
+			14423889,
 			&domain.User{
 				ID:         uuid.MustParse("91c37bcf-5dd5-4a8a-9009-c227d4e91d1e"),
 				Name:       "owner",
@@ -142,7 +121,7 @@ func TestUserService_Register(t *testing.T) {
 			"john",
 			"john1234",
 			1234,
-			0, 0,
+			0,
 			&domain.User{
 				ID:         uuid.MustParse("91c37bcf-5dd5-4a8a-9009-c227d4e91d1e"),
 				Name:       "john",
@@ -171,7 +150,7 @@ func TestUserService_Register(t *testing.T) {
 			"malzon",
 			"foo21342",
 			54321,
-			2, 3,
+			2,
 			nil,
 			domain.ErrUserAlreadyExists,
 		},
@@ -193,7 +172,7 @@ func TestUserService_Register(t *testing.T) {
 			"fisher",
 			"chess1234",
 			54321,
-			2, 3,
+			2,
 			&domain.User{
 				ID:         uuid.MustParse("9111b01d-975e-443a-bcb7-1878f90a3470"),
 				Name:       "fisher",
@@ -213,7 +192,7 @@ func TestUserService_Register(t *testing.T) {
 			"",
 			"chess1234",
 			54321,
-			2, 3,
+			2,
 			nil,
 			domain.ErrInvalidName,
 		},
@@ -227,7 +206,7 @@ func TestUserService_Register(t *testing.T) {
 			"name",
 			"",
 			54321,
-			2, 3,
+			2,
 			&domain.User{
 				Name:       "name",
 				TelegramID: 54321,
@@ -244,7 +223,7 @@ func TestUserService_Register(t *testing.T) {
 			"ssdflkdsjfsldkfjsdflkdsjfsldkfjdflkdsjfsldkfjsdflkdsjfsldkfjlkjsz",
 			"username",
 			1234,
-			2, 3,
+			2,
 			nil,
 			domain.ErrMaxNameSize,
 		},
@@ -255,7 +234,7 @@ func TestUserService_Register(t *testing.T) {
 			"name",
 			"sldkfowefnonasdofijoierowerfsodf1",
 			1234,
-			2, 3,
+			2,
 			nil,
 			domain.ErrMaxUsernameSize,
 		},
@@ -265,7 +244,7 @@ func TestUserService_Register(t *testing.T) {
 			"		name     ",
 			"username",
 			1234,
-			2, 3,
+			2,
 			&domain.User{Name: "name", Username: "username", Role: domain.Member, Active: true, TelegramID: 1234},
 			nil,
 		},
@@ -275,7 +254,7 @@ func TestUserService_Register(t *testing.T) {
 			"   ",
 			"username",
 			1234,
-			2, 3,
+			2,
 			nil,
 			domain.ErrInvalidName,
 		},
@@ -297,7 +276,7 @@ func TestUserService_Register(t *testing.T) {
 			" ",
 			"chess1234",
 			54321,
-			2, 3,
+			2,
 			nil,
 			domain.ErrInvalidName,
 		},
@@ -309,7 +288,7 @@ func TestUserService_Register(t *testing.T) {
 			"ááíéáíóúóááíéáíóáíéáíóúóáúóáíéáíóóúóáúóá",
 			"username",
 			1234,
-			2, 3,
+			2,
 			&domain.User{
 				ID:         uuid.MustParse("9111b01d-975e-443a-bcb7-1878f90a3470"),
 				Name:       "ááíéáíóúóááíéáíóáíéáíóúóáúóáíéáíóóúóáúóá",
@@ -323,7 +302,7 @@ func TestUserService_Register(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.desc, func(t *testing.T) {
-			s := service.NewUserService(tt.repo, tt.adminID, tt.devID)
+			s := service.NewUserService(tt.repo, tt.adminID)
 
 			got, gotErr := s.Register(context.Background(), tt.name, tt.username, tt.telegramID)
 

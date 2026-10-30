@@ -32,8 +32,7 @@ func TestCategoryService_Create(t *testing.T) {
 		desc string
 		repo service.CategoryRepository
 		userID,
-		adminID,
-		devID int64
+		adminID int64
 		name    string
 		want    *domain.Category
 		wantErr error
@@ -44,7 +43,7 @@ func TestCategoryService_Create(t *testing.T) {
 				id: uuid.MustParse("21788057-b80e-440f-a44b-56833bbb8aa9"),
 			},
 			4321,
-			1234, 4321,
+			1234,
 			"		Saude ",
 			&domain.Category{ID: uuid.MustParse("21788057-b80e-440f-a44b-56833bbb8aa9"), Name: "Saude"},
 			nil,
@@ -53,7 +52,7 @@ func TestCategoryService_Create(t *testing.T) {
 			"user does not have permission",
 			&mockCategoryRepo{},
 			123442343,
-			1234, 4321,
+			1234,
 			"Saude",
 			nil,
 			domain.ErrAccessDenied,
@@ -62,7 +61,7 @@ func TestCategoryService_Create(t *testing.T) {
 			"invalid name",
 			&mockCategoryRepo{},
 			1234,
-			1234, 4321,
+			1234,
 			"    			",
 			nil,
 			domain.ErrInvalidName,
@@ -71,7 +70,7 @@ func TestCategoryService_Create(t *testing.T) {
 			"name with not enough characters",
 			&mockCategoryRepo{},
 			1234,
-			1234, 4321,
+			1234,
 			"Ab",
 			nil,
 			domain.ErrMinCategoryNameSize,
@@ -80,7 +79,7 @@ func TestCategoryService_Create(t *testing.T) {
 			"name exceeds characters limit",
 			&mockCategoryRepo{},
 			1234,
-			1234, 4321,
+			1234,
 			"asidufsdna slkdj slkdfjslk sdfa",
 			nil,
 			domain.ErrMaxCategoryNameSize,
@@ -93,7 +92,7 @@ func TestCategoryService_Create(t *testing.T) {
 				},
 			},
 			1234,
-			1234, 4321,
+			1234,
 			"mente",
 			nil,
 			domain.ErrCategoryAlreadyExists,
@@ -101,7 +100,7 @@ func TestCategoryService_Create(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.desc, func(t *testing.T) {
-			s := service.NewCategoryService(tt.repo, tt.adminID, tt.devID)
+			s := service.NewCategoryService(tt.repo, tt.adminID)
 			got, gotErr := s.Create(context.Background(), tt.name, tt.userID)
 
 			if !errors.Is(gotErr, tt.wantErr) {
