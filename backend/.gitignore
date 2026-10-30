@@ -1,2 +1,4 @@
 .env
 tmp/
+.neon
+node_modules/
