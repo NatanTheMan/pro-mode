@@ -15,6 +15,7 @@ var (
 	ErrMaxCategoryNameSize   = errors.New("category name must have a max of 30 characters")
 	ErrCategoryAlreadyExists = errors.New("category already exists")
 
-	ErrInvalidCategory   = errors.New("invalid category uuid")
-	ErrInvalidHabitScore = errors.New("invalid habit score")
+	ErrInvalidCategory    = errors.New("invalid category uuid")
+	ErrInvalidHabitScore  = errors.New("invalid habit score")
+	ErrHabitAlreadyExists = errors.New("habit already exists")
 )
